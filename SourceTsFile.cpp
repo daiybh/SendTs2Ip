@@ -161,7 +161,8 @@ DWORD Source_TsFile::ReadTS()
 				{	
 					start_pcr = pcr;
 					start_time = current_time;
-					printf("Reset pcr and time.\n");
+					if(getShowMsg())
+						printf("Reset pcr and time.\n");
 				}
 				current_pcr = pcr;
 			}
@@ -178,7 +179,8 @@ DWORD Source_TsFile::ReadTS()
 			else
 			{
 				p_ts_packet = m_vTsPacket.GetFullBuffer();
-				printf("TS packet is too more,droped!\n");
+				if(getShowMsg())
+					printf("TS packet is too more,droped!\n");
 			}
 		}
 		p_ts_packet->FillData(m_BufferSync.m_pData, m_nTsPacketSize);

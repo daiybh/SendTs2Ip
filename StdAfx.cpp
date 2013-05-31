@@ -6,3 +6,13 @@
 
 // TODO: reference any additional headers you need in STDAFX.H
 // and not in this file
+
+bool g_ShowMSG=true;
+void setShowMsg(bool bShowMsg)
+{
+	g_ShowMSG = bShowMsg;
+}
+bool getShowMsg()
+{
+return g_ShowMSG;
+}

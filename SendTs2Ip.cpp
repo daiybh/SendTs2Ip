@@ -123,6 +123,16 @@ void getParamValue(TCHAR*src,TCHAR* &pstrParamName,TCHAR* &pstrValue)
 	memset(ppos,0,1);
 	pstrValue = ppos+1;	
 }
+void ShouUsage()
+{
+	cout << "*******************************\n" << endl;
+	//cout << "喜之狼の裤子\n70565912@qq.com\n" << endl;
+	cout << "SendTs2Ip.exe v1.0\n" << endl;
+	cout << "*******************************\n" << endl;
+	cout << "SendTs2Ip.exe tsFilePath bindIP[0] target_ip target_port is_rtp\n"<<endl;
+	cout << "SendTs2Ip.exe ts=c:\\1.ts bindIP=192.168.1.2 target_ip=202.2.2.3 target_port=5555 is_rtp=0\n"<<endl;
+	cout << "*******************************\n\n" << endl;
+}
 int _tmain(int argc, _TCHAR* argv[])
 //int main(int argc, char* argv[])
 {
@@ -141,17 +151,12 @@ int _tmain(int argc, _TCHAR* argv[])
 		return 0;
 	}
 
-	HANDLE stdHandle = 	GetStdHandle(STD_OUTPUT_HANDLE);
+	//HANDLE stdHandle = 	GetStdHandle(STD_OUTPUT_HANDLE);
 
 	vector<tstring> vTsFile;
 
-	cout << "*******************************\n" << endl;
-	//cout << "喜之狼の裤子\n70565912@qq.com\n" << endl;
-	cout << "SendTs2Ip.exe v1.0\n" << endl;
-	cout << "*******************************\n" << endl;
-	cout << "SendTs2Ip.exe tsFilePath bindIP[0] target_ip target_port is_rtp\n"<<endl;
-	cout << "SendTs2Ip.exe ts=c:\\1.ts bindIP=192.168.1.2 target_ip=202.2.2.3 target_port=5555 is_rtp=0\n"<<endl;
-	cout << "*******************************\n\n" << endl;
+	if(argc <5)
+		ShouUsage();
 	ts_file_path=_T("d:\\cctv_HD.mpg");
 	if(argc>1)
 		ts_file_path=argv[1];
@@ -166,7 +171,6 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		if(nMod==1)
 		{
-
 			TCHAR tempBuffer[100];
 			for (int i=1;i<argc;i++)
 			{
@@ -199,9 +203,11 @@ int _tmain(int argc, _TCHAR* argv[])
 				{
 					ts_file_path=pstrValue;
 				}
-
+				else if(_tcscmp(pstrParamName,_T("showmsg"))==0)
+				{
+					setShowMsg(_ttoi(pstrValue));
+				}
 			}
-
 		}
 		else if(nMod==0)
 		{
@@ -235,10 +241,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 	cout<<"------------------------------------"<<endl;
-	cout<<"bindIP:"<<t2a(bind_ip)<<"__port:"<<bind_port<<endl;
-	cout<<"ip:"<<t2a(target_ip)<<"__port:"<<target_port<<endl;
+	cout<<"bindIP:"<<t2a(bind_ip)<<":"<<bind_port<<" ";
+	cout<<"targetIP:"<<t2a(target_ip)<<":"<<target_port<<endl;
+	cout<<"rtp:"<<is_rtp<<" ";
 	cout<<"tsfilePath:"<<t2a(ts_file_path)<<endl;
-	cout<<"rtp:"<<is_rtp<<endl;
 	g_udp = NULL;
 	g_rtp = NULL;
 
@@ -265,7 +271,6 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	g_sourct = new Source_TsFile();
 	g_sourct->SetGetTsPacketDataCB(GetTsPacketData, NULL, TS_PACKET_SIZE_MIN*7);
-
 	do
 	{
 		if (g_sourct->Open(ts_file_path.c_str()) == FALSE)
@@ -273,8 +278,10 @@ int _tmain(int argc, _TCHAR* argv[])
 			printf("Open ts file error :%s", t2a(ts_file_path).c_str());
 			break;
 		}
-
-		cout << "\nIs working.\nIf u want exit, Input any key :" << endl;
+		if(getShowMsg())
+		{
+			cout << "\nIs working.\nIf u want exit, Input any key :" << endl;			
+		}
 		cin >> i;
 
 	}while(0);

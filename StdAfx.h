@@ -27,6 +27,8 @@
 #define tstring string
 #endif
 
+void setShowMsg(bool bShowMsg);
+bool getShowMsg();
 using namespace std;
 
 
